@@ -2,6 +2,12 @@ import pygame
 import sys
 import random
 
+#TODO :
+#Changer pour aspect visuelle plus intéressant
+#Ajouter une condition pour ne pas faire apparaitre la nourriture dans le snake
+#AJouter les bordures
+
+
 SCREEN_WIDTH = 480
 SCREEN_HEIGTH = 480
 
@@ -27,7 +33,7 @@ class Snake(object):
         return self.positions[0]
 
     def turn(self, point):
-        if self.length > 1 and (point[0]* -1,point[1]* -1) == self.direction:
+        if self.length > 1 and (point[0]*-1,point[1]* -1) == self.direction:
             return
         else:
             self.direction = point
@@ -35,7 +41,7 @@ class Snake(object):
     def move(self):
         cur = self.get_head_position()
         x, y = self.direction
-        new = (((cur[0] + (x*GRID_SIZE)) % SCREEN_WIDTH), (cur[1] + (y*GRID_SIZE % SCREEN_HEIGTH)))
+        new = (((cur[0] + (x*GRID_SIZE)) % SCREEN_WIDTH), (cur[1] + (y*GRID_SIZE)) % SCREEN_HEIGTH)
 
         if len(self.positions) > 2 and new in self.positions[2:]:
             self.reset()
@@ -64,7 +70,7 @@ class Snake(object):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     self.turn(UP)
-                elif event.key == pygame.KEYDOWN:
+                elif event.key == pygame.K_DOWN:
                     self.turn(DOWN)
                 elif event.key == pygame.K_LEFT:
                     self.turn(LEFT)
@@ -113,22 +119,23 @@ def main():
     snake = Snake()
     food = Food()
 
+    myfont = pygame.font.SysFont("monospace", 16)
+
     while True:
 
         clock.tick(10)
         snake.handle_keys()
         drawGrid(surface)
         snake.move()
-
         if snake.get_head_position() == food.position:
             snake.length += 1
             score += 1
             food.randomize_position()
         snake.draw(surface)
         food.draw(surface)
-     #   myfont = pygame.font.SysFont('timesnewroman', 30)
+
         screen.blit(surface, (0, 0))
-      #  text = myfont.render("Score {0}".format(score),1,(0,0,0))
-      #  screen.blit(text, (5, 10))
+        text = myfont.render("Score {0}".format(score), 1, (0, 0, 0))
+        screen.blit(text, (5, 10))
         pygame.display.update()
 main()
