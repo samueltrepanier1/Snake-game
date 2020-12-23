@@ -2,10 +2,9 @@ import pygame
 import sys
 import random
 
-#TODO :
-#Changer pour aspect visuelle plus intéressant
-#Ajouter une condition pour ne pas faire apparaitre la nourriture dans le snake
-#AJouter les bordures
+#TODO : Changer pour aspect visuelle plus intéressant
+#TODO : Ajouter une condition pour ne pas faire apparaitre la nourriture dans le snake
+#TODO :Ajouter les bordures
 
 
 SCREEN_WIDTH = 480
