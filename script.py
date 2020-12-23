@@ -83,8 +83,8 @@ class Food(object):
 
     def draw(self, surface):
        r = pygame.Rect((self.position[0],self.position[1]), (GRID_SIZE,GRID_SIZE))
-       pygame.draw.rect(surface,self.color)
-       pygame.draw.rect(surface, (93, 216, 228),r,1)
+       pygame.draw.rect(surface, self.color,r)
+       pygame.draw.rect(surface, (93, 216, 228), r, 1)
 
 
 def drawGrid(surface):
@@ -112,12 +112,23 @@ def main():
     score = 0
     snake = Snake()
     food = Food()
-    running = True
 
-    while running:
+    while True:
 
         clock.tick(10)
-        screen.blit(surface, (0, 0))
-        pygame.display.update()
+        snake.handle_keys()
+        drawGrid(surface)
+        snake.move()
 
+        if snake.get_head_position() == food.position:
+            snake.length += 1
+            score += 1
+            food.randomize_position()
+        snake.draw(surface)
+        food.draw(surface)
+     #   myfont = pygame.font.SysFont('timesnewroman', 30)
+        screen.blit(surface, (0, 0))
+      #  text = myfont.render("Score {0}".format(score),1,(0,0,0))
+      #  screen.blit(text, (5, 10))
+        pygame.display.update()
 main()
