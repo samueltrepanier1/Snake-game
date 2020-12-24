@@ -77,13 +77,14 @@ class Snake(object):
                     self.turn(LEFT)
                 elif event.key == pygame.K_RIGHT:
                     self.turn(RIGTH)
-    def is_out(self):S
+    def is_out(self):
         if (self.get_head_position()[0] == 0) or (self.get_head_position()[1] == 0):
             return True
         elif (self.get_head_position()[0] == (int((SCREEN_WIDTH)-1*GRID_SIZE))) or (self.get_head_position()[1] == (int((SCREEN_WIDTH)-1*GRID_SIZE))):
             return  True
         else:
             return False
+
 
 
 class Food(object):
@@ -132,6 +133,7 @@ def FoodInSnake(food, snake):
 
 
 def main():
+
     pygame.init()
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((SCREEN_HEIGTH,SCREEN_HEIGTH),0,32)
@@ -164,6 +166,9 @@ def main():
 
         if(snake.is_out() == False):
             snake.draw(surface)
+
+
+
         food.draw(surface)
 
         screen.blit(surface, (0, 0))
