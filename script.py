@@ -10,7 +10,7 @@ import random
 SCREEN_WIDTH = 480
 SCREEN_HEIGTH = 480
 
-GRID_SIZE = 10
+GRID_SIZE = 20
 GRID_WIDTH = SCREEN_WIDTH / GRID_SIZE
 GRID_HEIGTH = SCREEN_HEIGTH / GRID_SIZE
 
@@ -86,6 +86,7 @@ class Snake(object):
         else:
             return False
 
+
 class Food(object):
 
     def __init__(self):
@@ -94,7 +95,7 @@ class Food(object):
         self.randomize_position()
 
     def randomize_position(self):
-        self.position = (random.randint(0, GRID_WIDTH - 2) * GRID_SIZE, (random.randint(0, GRID_HEIGTH -2) * GRID_SIZE))
+        self.position = (random.randint(1, GRID_WIDTH - 2) * GRID_SIZE, (random.randint(1, GRID_HEIGTH -2) * GRID_SIZE))
         print(self.position)
 
 
@@ -162,8 +163,8 @@ def main():
                 food.randomize_position()
 
 
-
-        snake.draw(surface)
+        if(snake.is_out() == False):
+            snake.draw(surface)
         food.draw(surface)
 
         screen.blit(surface, (0, 0))
@@ -174,10 +175,5 @@ def main():
         screen.blit(text_head, (5, 25))
         screen.blit(text_food, (5, 45))
         pygame.display.update()
-
-        #print(snake.get_head_position()[0])
-        #print(snake.get_head_position()[1])
-        print(GRID_WIDTH - 1)
-
 
 main()
