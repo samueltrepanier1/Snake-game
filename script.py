@@ -2,10 +2,9 @@ import pygame
 import sys
 import random
 
-#TODO : Changer pour aspect visuelle plus intéressant
-#TODO : Ajouter une condition pour ne pas faire apparaitre la nourriture dans le snake
-#TODO :Ajouter les bordures
-
+#TODO Ajouter un menu avant de démarrer
+#TODO Ajouter une touche pour montrer/cacher les informations
+#TODO Ajouter les informations (direction tête, direction queu, vision (8 axes -distance mur, présence pomme, présence serpent)
 
 SCREEN_WIDTH = 480
 SCREEN_HEIGTH = 480
@@ -78,7 +77,7 @@ class Snake(object):
                     self.turn(LEFT)
                 elif event.key == pygame.K_RIGHT:
                     self.turn(RIGTH)
-    def is_out(self):
+    def is_out(self):S
         if (self.get_head_position()[0] == 0) or (self.get_head_position()[1] == 0):
             return True
         elif (self.get_head_position()[0] == (int((SCREEN_WIDTH)-1*GRID_SIZE))) or (self.get_head_position()[1] == (int((SCREEN_WIDTH)-1*GRID_SIZE))):
