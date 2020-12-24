@@ -10,7 +10,7 @@ import random
 SCREEN_WIDTH = 480
 SCREEN_HEIGTH = 480
 
-GRID_SIZE = 20
+GRID_SIZE = 10
 GRID_WIDTH = SCREEN_WIDTH / GRID_SIZE
 GRID_HEIGTH = SCREEN_HEIGTH / GRID_SIZE
 
@@ -45,6 +45,9 @@ class Snake(object):
         if len(self.positions) > 2 and new in self.positions[2:]:
             self.reset()
 
+        elif self.is_out():
+            self.reset()
+
         else:
             self.positions.insert(0, new)
             if len(self.positions) > self.length:
@@ -59,7 +62,7 @@ class Snake(object):
         for x in self.positions:
             r = pygame.Rect((x[0],x[1]), (GRID_SIZE,GRID_SIZE))
             pygame.draw.rect(surface, self.color, r)
-            pygame.draw.rect(surface, (93,216,228),r,1)
+            pygame.draw.rect(surface, (0,255,94),r,0)
 
     def handle_keys(self):
         for event in pygame.event.get():
@@ -75,6 +78,13 @@ class Snake(object):
                     self.turn(LEFT)
                 elif event.key == pygame.K_RIGHT:
                     self.turn(RIGTH)
+    def is_out(self):
+        if (self.get_head_position()[0] == 0) or (self.get_head_position()[1] == 0):
+            return True
+        elif (self.get_head_position()[0] == (int((SCREEN_WIDTH)-1*GRID_SIZE))) or (self.get_head_position()[1] == (int((SCREEN_WIDTH)-1*GRID_SIZE))):
+            return  True
+        else:
+            return False
 
 class Food(object):
 
@@ -84,25 +94,41 @@ class Food(object):
         self.randomize_position()
 
     def randomize_position(self):
-        self.position = (random.randint(0, GRID_WIDTH - 1) * GRID_SIZE, (random.randint(0, GRID_HEIGTH -1) * GRID_SIZE))
+        self.position = (random.randint(0, GRID_WIDTH - 2) * GRID_SIZE, (random.randint(0, GRID_HEIGTH -2) * GRID_SIZE))
+        print(self.position)
+
 
     def draw(self, surface):
        r = pygame.Rect((self.position[0],self.position[1]), (GRID_SIZE,GRID_SIZE))
        pygame.draw.rect(surface, self.color,r)
-       pygame.draw.rect(surface, (93, 216, 228), r, 1)
+       pygame.draw.rect(surface, (255, 0, 0), r, 0)
 
 
 def drawGrid(surface):
     for y in range(0,int(GRID_HEIGTH)):
         for x in range(0, int(GRID_WIDTH)):
+
+
+
             if (x+y) % 2 == 0:
                 r = pygame.Rect((x*GRID_SIZE,y*GRID_SIZE), (GRID_SIZE,GRID_SIZE))
-                pygame.draw.rect(surface,(93,216,228),r)
+                pygame.draw.rect(surface,(25,25,25),r)
             else:
                 rr = pygame.Rect((x * GRID_SIZE, y * GRID_SIZE), (GRID_SIZE, GRID_SIZE))
-                pygame.draw.rect(surface, (84, 194, 205), rr)
+                pygame.draw.rect(surface, (20, 20, 20), rr)
+
+            if (x == 0) or (y == 0) or x == (int(GRID_HEIGTH)-1) or y == (int(GRID_HEIGTH)-1):
+                rrr = pygame.Rect((x * GRID_SIZE, y * GRID_SIZE), (GRID_SIZE, GRID_SIZE))
+                pygame.draw.rect(surface, (0, 0, 0), rrr)
 
 
+
+
+def FoodInSnake(food, snake):
+    if food.position in snake.positions:
+        return True
+    else:
+        return False
 
 
 def main():
@@ -121,20 +147,37 @@ def main():
     myfont = pygame.font.SysFont("monospace", 16)
 
     while True:
-
-        clock.tick(10)
+        score = len(snake.positions)
+        clock.tick(15)
         snake.handle_keys()
         drawGrid(surface)
         snake.move()
         if snake.get_head_position() == food.position:
             snake.length += 1
-            score += 1
+
+
             food.randomize_position()
+            #Make sure the food is not in the snake
+            while(FoodInSnake(food, snake)):
+                food.randomize_position()
+
+
+
         snake.draw(surface)
         food.draw(surface)
 
         screen.blit(surface, (0, 0))
-        text = myfont.render("Score {0}".format(score), 1, (0, 0, 0))
-        screen.blit(text, (5, 10))
+        text_score = myfont.render("Score {0}".format(score), 1, (255, 255, 255))
+        text_head = myfont.render("Head = {0}".format(snake.get_head_position()), 1, (255, 255, 255))
+        text_food = myfont.render("Food = {0}".format(food.position), 1, (255, 255, 255))
+        screen.blit(text_score, (5, 5))
+        screen.blit(text_head, (5, 25))
+        screen.blit(text_food, (5, 45))
         pygame.display.update()
+
+        #print(snake.get_head_position()[0])
+        #print(snake.get_head_position()[1])
+        print(GRID_WIDTH - 1)
+
+
 main()
